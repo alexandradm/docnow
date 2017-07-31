@@ -6,6 +6,7 @@ import { activateKeys } from './auth'
 import log from './logger'
 
 const app = express()
+
 const db = new Database()
 
 db.startTrendsWatcher({interval: 60 * 1000})

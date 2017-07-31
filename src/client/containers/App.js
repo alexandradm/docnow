@@ -10,6 +10,7 @@ import ProfilePage from './ProfilePage'
 import { getUser } from '../actions/user'
 import { getSettings } from '../actions/settings'
 import { getWorld } from '../actions/trends'
+import { connect } from '../actions/websocket'
 import './App.css'
 
 class App extends Component {
@@ -18,6 +19,7 @@ class App extends Component {
     store.dispatch(getSettings())
     store.dispatch(getUser())
     store.dispatch(getWorld())
+    store.dispatch(connect())
     fetch('/api/v1/setup', {credentials: 'same-origin'})
       .then(resp => resp.json())
       .then(result => {

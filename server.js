@@ -6,6 +6,7 @@ const path = require('path')
 const morgan = require('morgan')
 const webpack = require('webpack')
 const express = require('express')
+const expressWs = require('express-ws')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cookieSession = require('cookie-session')
@@ -26,6 +27,7 @@ const defaultPort = 3000
 const compiler = webpack(config)
 
 const app = express()
+expressWs(app)
 
 app.set('port', process.env.PORT || defaultPort)
 
@@ -53,6 +55,12 @@ if (isDevelopment) {
   app.get('/', (req, res) => res.sendFile(path.join(distDir, 'index.html')))
   app.use(express.static(distDir))
 }
+
+app.ws('/websocket', (ws, req) => {
+  ws.on('message', (msg) => {
+    console.log(req, msg)
+  })
+})
 
 log.info('starting app')
 app.listen(app.get('port'))
