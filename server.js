@@ -56,11 +56,5 @@ if (isDevelopment) {
   app.use(express.static(distDir))
 }
 
-app.ws('/websocket', (ws, req) => {
-  ws.on('message', (msg) => {
-    console.log(req, msg)
-  })
-})
-
 log.info('starting app')
 app.listen(app.get('port'))

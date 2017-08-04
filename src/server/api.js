@@ -4,8 +4,10 @@ import * as fs from 'fs'
 import { Database } from './db'
 import { activateKeys } from './auth'
 import log from './logger'
+import expressWs from 'express-ws'
 
 const app = express()
+expressWs(app)
 
 const db = new Database()
 
@@ -116,6 +118,12 @@ app.post('/logo', (req, res) => {
       })
     }
   }
+})
+
+app.ws('/websocket', (ws, req) => {
+  ws.on('message', (msg) => {
+    console.log(msg)
+  })
 })
 
 module.exports = app
