@@ -2,11 +2,12 @@
 
 require('babel-register')()
 
+const ws = require('ws')
+const http = require('http')
 const path = require('path')
 const morgan = require('morgan')
 const webpack = require('webpack')
 const express = require('express')
-const expressWs = require('express-ws')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cookieSession = require('cookie-session')
@@ -17,6 +18,7 @@ const webpackHotMiddleware = require('webpack-hot-middleware')
 const api = require('./src/server/api')
 const auth = require('./src/server/auth')
 const log = require('./src/server/logger')
+const websocket = require('./src/server/websocket')
 const config = require('./webpack.dev.config.js')
 
 const distDir = path.join(__dirname, 'dist')
@@ -27,7 +29,6 @@ const defaultPort = 3000
 const compiler = webpack(config)
 
 const app = express()
-expressWs(app)
 
 app.set('port', process.env.PORT || defaultPort)
 
@@ -39,7 +40,7 @@ app.use(passport.session())
 app.use(morgan('combined'))
 
 app.use('/api/v1', api)
-app.use('/auth', auth.app)
+app.use('/auth', auth)
 app.use('/userData', express.static(staticAssets))
 
 if (isDevelopment) {
@@ -56,5 +57,11 @@ if (isDevelopment) {
   app.use(express.static(distDir))
 }
 
-log.info('starting app')
-app.listen(app.get('port'))
+const server = http.createServer(app)
+const wss = new ws.Server({ server })
+
+wss.on('connection', websocket)
+
+log.info('starting')
+
+server.listen(app.get('port'))

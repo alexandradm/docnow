@@ -43,7 +43,6 @@
     "cookie-session": "^2.0.0-beta.2",
     "express": "^4.15.2",
     "express-session": "^1.15.3",
-    "express-ws": "^3.0.0",
     "mocha": "^3.4.2",
     "morgan": "^1.8.2",
     "multiparty": "^4.1.3",

@@ -5,7 +5,7 @@ import { Database } from './db'
 
 const db = new Database()
 
-export const app = express()
+const app = express()
 
 export const activateKeys = () => {
   db.getSettings().then((settings) => {
@@ -76,3 +76,5 @@ app.get('/logout', (req, res) => {
 app.get('/user', (req, res) => {
   res.json({user: req.user})
 })
+
+module.exports = app
